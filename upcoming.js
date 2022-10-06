@@ -2,7 +2,7 @@ function cardUpcoming(data) {
     let container = document.getElementById("upcoming")
     container.className += (" d-flex flex-wrap justify-content-center gap-5")
     for (let i = 0; i < data.events.length; i++) {
-        if (upcomingEvents(data, i)) {
+        if (!upcomingEvents(data, i)) {
             let div = document.createElement("div")
             div.innerHTML +=
                 `
