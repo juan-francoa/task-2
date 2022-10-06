@@ -1,0 +1,26 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+header img{
+    height: 50px;
+    width: 200px;
+}
+header{
+    background-color: #2a363b;
+}
+.footer{
+    background-color: #2a363b;
+}
+.backcard{
+    background-color: #2a363b !important;
+    color: white !important;
+}
+.backcard h5{
+    color: #fecea8;
+}
+body{
+    background-color: #DFF6FF !important;
+}
+
