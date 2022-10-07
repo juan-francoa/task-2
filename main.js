@@ -1,6 +1,8 @@
 function cardMain(data) {
     let conteMain = document.getElementById("main")
-    conteMain.className +=(" d-flex flex-wrap justify-content-center gap-5")
+    let diy = document.createElement("div")
+    diy.className += (" d-flex flex-wrap justify-content-center gap-5")
+    conteMain.appendChild(diy)
     for (let i = 0;i<data.events.length;i++) {
         let div = document.createElement("div")
         div.innerHTML += 
@@ -14,12 +16,15 @@ function cardMain(data) {
             </div>
         </div>
         `  
-        conteMain.appendChild(div)   
+        diy.appendChild(div)   
     }
 }
+//upcoming
 function cardUpcoming(data) {
     let container = document.getElementById("upcoming")
-    container.className += (" d-flex flex-wrap justify-content-center gap-5")
+    let diy = document.createElement("div")
+    diy.className += (" d-flex flex-wrap justify-content-center gap-5")
+    container.appendChild(diy)
     for (let i = 0; i < data.events.length; i++) {
         if (!upcomingEvents(data, i)) {
             let div = document.createElement("div")
@@ -34,7 +39,7 @@ function cardUpcoming(data) {
                     </div>
                 </div>
                 `
-            container.appendChild(div)
+            diy.appendChild(div)
         }
     }
 }
@@ -69,7 +74,6 @@ function converDate(data, i) {
     }
     return array
 }
-//upcoming
 function converCurrentDate(data) {
     let array = []
     let arraystring = []
@@ -96,7 +100,9 @@ function converCurrentDate(data) {
 //past
 function cardpast(data) {
     let container = document.getElementById("past")
-    container.className += (" d-flex flex-wrap justify-content-center gap-5")
+    let diy = document.createElement("div")
+    diy.className += (" d-flex flex-wrap justify-content-center gap-5")
+    container.appendChild(diy)
     for (let i = 0; i < data.events.length; i++) {
         if (upcomingEvents(data, i)) {
             let div = document.createElement("div")
@@ -111,7 +117,7 @@ function cardpast(data) {
                     </div>
                 </div>
                 `
-            container.appendChild(div)
+            diy.appendChild(div)
         }
     }
 }
