@@ -45,3 +45,27 @@ let pas = document.getElementById("past")
 if(pas !== null){
    cardpast(data)
 }
+
+function categorys(data){
+    let array = data.events.map(value => value.category)
+    array = [... new Set(array)]
+    return array
+}
+function categorysCheckbox(data){
+    let category = categorys(data)
+    let container = document.getElementById("checkbox-index")
+    let checkbox = category.forEach(value => imprimirCategorys(container, value));
+}
+function imprimirCategorys(padre, value){
+    let div = document.createElement("div")
+    div.innerHTML = 
+        `
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="${value}">
+            <label class="form-check-label" for="inlineCheckbox1"> ${value} </label>
+        </div>
+        `
+        padre.appendChild(div)
+}
+
+categorysCheckbox(data)
