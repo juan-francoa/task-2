@@ -45,8 +45,9 @@ if(up !== null){
 }
 let pas = document.getElementById("past")
 if(pas !== null){
-    categorysCheckbox(data, "checkbox-upcoming")
-    eventsCategory(data, "checkbox-upcoming")
+    cardpast(data)
+    categorysCheckbox(data, "checkbox-past")
+    eventsCategory(data, "checkbox-past", "past")
 }
 
 function categorys(data){
@@ -87,8 +88,17 @@ function imprimirCardCategory(data, aray, element,id2){
     console.log(x)
     if(x.length !== 0){
         array.innerHTML = ""
-        let y = data.events.filter(element2 => x.includes(element2.category)).forEach(value0 => imprimirCard(array,value0))
-        
+        if(id2 === "main"){
+            data.events.filter(element2 => x.includes(element2.category)).forEach(value0 => imprimirCard(array,value0))
+        }
+        if(id2 === "upcoming"){
+            let fecha = new Date(data.currentDate)
+            data.events.filter(value => (fecha >= new Date(value.date))).filter(element2 => x.includes(element2.category)).forEach(value0 => imprimirCard(array,value0))
+        }
+        if(id2 === "past"){
+            let fecha = new Date(data.currentDate)
+            data.events.filter(value => (fecha < new Date(value.date))).filter(element2 => x.includes(element2.category)).forEach(value0 => imprimirCard(array,value0))
+        }
     }
     else{
         array.innerHTML = ""
@@ -97,6 +107,9 @@ function imprimirCardCategory(data, aray, element,id2){
         }
         if(id2 === "upcoming"){
             cardUpcoming(data)
+        }
+        if(id2 === "past"){
+            cardpast(data)
         }
     }    
 
