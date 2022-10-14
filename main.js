@@ -1,6 +1,5 @@
 function imprimirCard(padre, value){
-    let div = document.createElement("div")
-    div.innerHTML = 
+    padre.innerHTML += 
         `
         <div class="card" style="width: 18rem;">
             <img src="${value["image"]}" class="card-img-top" alt="${value["name"]}">
@@ -10,20 +9,19 @@ function imprimirCard(padre, value){
                 <a href="#" class="btn btn-primary">Details</a>
             </div>
         </div>
-        `
-        padre.appendChild(div)    
+        `  
 }
 function cardMain(data){
     let conteMain = document.getElementById("main")
     conteMain.className = ("d-flex flex-wrap justify-content-center gap-5")
-    let card = data.events.map(value => imprimirCard(conteMain, value))
+    data.events.map(value => imprimirCard(conteMain, value))
 }
 //upcoming
 function cardUpcoming(data) {
     let container = document.getElementById("upcoming")
     container.className = ("d-flex flex-wrap justify-content-center gap-5")
     let fecha = new Date(data.currentDate)
-    let card = data.events.filter(value => (fecha >= new Date(value.date) && imprimirCard(container,value)))
+    data.events.filter(value => (fecha >= new Date(value.date) && imprimirCard(container,value)))
 }
 
 //past
@@ -33,39 +31,73 @@ function cardpast(data) {
     let fecha = new Date(data.currentDate)
     let card = data.events.filter(value => (fecha < new Date(value.date) && imprimirCard(container,value)))
 }
-let Main = document.getElementById("main")
-if(Main !== null){
+let xs = document.getElementById("main")
+if(xs !== null){
     cardMain(data)
+    categorysCheckbox(data, "checkbox-index")
+    eventsCategory(data, "checkbox-index", "main")
 }
 let up = document.getElementById("upcoming")
 if(up !== null){
     cardUpcoming(data)
+    categorysCheckbox(data, "checkbox-upcoming")
+    eventsCategory(data, "checkbox-upcoming", "upcoming")
 }
 let pas = document.getElementById("past")
 if(pas !== null){
-   cardpast(data)
+    categorysCheckbox(data, "checkbox-upcoming")
+    eventsCategory(data, "checkbox-upcoming")
 }
 
 function categorys(data){
     let array = data.events.map(value => value.category)
-    array = [... new Set(array)]
-    return array
+    return [... new Set(array)].sort()
 }
-function categorysCheckbox(data){
+function categorysCheckbox(data, id){
     let category = categorys(data)
-    let container = document.getElementById("checkbox-index")
-    let checkbox = category.forEach(value => imprimirCategorys(container, value));
+    let container = document.getElementById(id)
+    category.map(value => imprimirCategorys(container, value));
 }
 function imprimirCategorys(padre, value){
-    let div = document.createElement("div")
-    div.innerHTML = 
+
+    padre.innerHTML += 
         `
         <div class="form-check form-check-inline">
             <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="${value}">
             <label class="form-check-label" for="inlineCheckbox1"> ${value} </label>
         </div>
         `
-        padre.appendChild(div)
 }
 
-categorysCheckbox(data)
+
+function eventsCategory(data,id,id2){
+    let checkbox = document.getElementById(id)
+    let aray = categorys(data).map(values => ({ value : values, checked : false}))
+    checkbox.addEventListener("change",(element => imprimirCardCategory(data, aray, element,id2)))
+}
+function imprimirCardCategory(data, aray, element,id2){
+    let array = document.getElementById(id2)
+    array.className = ("d-flex flex-wrap justify-content-center gap-5")
+    aray.map(elements => {
+        if(elements.value === element.target.value){
+           elements.checked = element.target.checked
+        }
+    } )
+    let x = aray.filter(element1 => element1.checked).map(element0 => element0.value)
+    console.log(x)
+    if(x.length !== 0){
+        array.innerHTML = ""
+        let y = data.events.filter(element2 => x.includes(element2.category)).forEach(value0 => imprimirCard(array,value0))
+        
+    }
+    else{
+        array.innerHTML = ""
+        if(id2 === "main"){
+            cardMain(data)
+        }
+        if(id2 === "upcoming"){
+            cardUpcoming(data)
+        }
+    }    
+
+}
