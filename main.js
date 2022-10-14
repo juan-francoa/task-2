@@ -112,5 +112,28 @@ function imprimirCardCategory(data, aray, element,id2){
             cardpast(data)
         }
     }    
+}
 
+search(data, "form-index", "main")
+
+function search(data, id, id2){
+    let checkbox = document.getElementById(id)
+    checkbox.addEventListener("input",(element => imprimirCardSearch(data, id2, element)))
+}
+function imprimirCardSearch(data, id2, element){
+    let array = document.getElementById(id2)
+    array.className = ("d-flex flex-wrap justify-content-center gap-5")
+    let x = element.target.value.toLowerCase()
+    if(x.includes(data.events.map(value4 => value4.name.toLowerCase() || value4.description.toLowerCase()))){
+        array.innerHTML = ""
+        if(id2 === "main"){
+            data.events.filter(element2 => x.includes((element2.name).toLowerCase()) || x.includes((element2.description).toLowerCase())).forEach(value0 => imprimirCard(array,value0))
+        }
+    }
+    else{
+        array.innerHTML = ""
+        if(id2 === "main"){
+            cardMain(data)
+    } 
+    }    
 }
