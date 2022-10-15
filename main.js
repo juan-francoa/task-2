@@ -31,12 +31,17 @@ function cardpast(data) {
     let fecha = new Date(data.currentDate)
     let card = data.events.filter(value => (fecha < new Date(value.date) && imprimirCard(container,value)))
 }
+
+
 let xs = document.getElementById("main")
 if(xs !== null){
     cardMain(data)
     categorysCheckbox(data, "checkbox-index")
     eventsCategory(data, "checkbox-index", "main")
+    eventSearch(data, "main" ,"form")
 }
+
+/*
 let up = document.getElementById("upcoming")
 if(up !== null){
     cardUpcoming(data)
@@ -49,7 +54,7 @@ if(pas !== null){
     categorysCheckbox(data, "checkbox-past")
     eventsCategory(data, "checkbox-past", "past")
 }
-
+*/
 function categorys(data){
     let array = data.events.map(value => value.category)
     return [... new Set(array)].sort()
@@ -85,7 +90,6 @@ function imprimirCardCategory(data, aray, element,id2){
         }
     } )
     let x = aray.filter(element1 => element1.checked).map(element0 => element0.value)
-    console.log(x)
     if(x.length !== 0){
         array.innerHTML = ""
         if(id2 === "main"){
@@ -113,27 +117,43 @@ function imprimirCardCategory(data, aray, element,id2){
         }
     }    
 }
-
-search(data, "form-index", "main")
-
-function search(data, id, id2){
-    let checkbox = document.getElementById(id)
-    checkbox.addEventListener("input",(element => imprimirCardSearch(data, id2, element)))
+function eventSearch(data, id2, selector){
+    let form = document.querySelector(selector)
+    let card = document.getElementById(id2)
+    form.addEventListener("submit", (events) =>  imprimirSearch(data, events, id2, card))
 }
-function imprimirCardSearch(data, id2, element){
-    let array = document.getElementById(id2)
-    array.className = ("d-flex flex-wrap justify-content-center gap-5")
-    let x = element.target.value.toLowerCase()
-    if(x.includes(data.events.map(value4 => value4.name.toLowerCase() || value4.description.toLowerCase()))){
-        array.innerHTML = ""
-        if(id2 === "main"){
-            data.events.filter(element2 => x.includes((element2.name).toLowerCase()) || x.includes((element2.description).toLowerCase())).forEach(value0 => imprimirCard(array,value0))
+
+function formData(events){
+    events.preventDefault()
+    return events.target[0].value.toLowerCase()
+}
+
+function imprimirSearch(data, events, id2, card){
+    let stringEvent = formData(events)
+        if( stringEvent.length !== 0){
+            card.innerHTML = ""
+            if(id2 === "main"){
+            data.events.filter(element11 => element11.name.toLowerCase().includes(stringEvent) || element11.description.toLowerCase().includes(stringEvent)).forEach(element101 => imprimirCard(card ,element101) )
+            }
+            if(id2 === "upcoming"){
+                let fecha = new Date(data.currentDate)
+                data.events.filter(value => (fecha >= new Date(value.date))).filter(element11 => element11.name.toLowerCase().includes(stringEvent) || element11.description.toLowerCase().includes(stringEvent)).forEach(element101 => imprimirCard(card ,element101) )
+            }
+            if(id2 === "past"){
+                let fecha = new Date(data.currentDate)
+                data.events.filter(value => (fecha < new Date(value.date))).filter(element11 => element11.name.toLowerCase().includes(stringEvent) || element11.description.toLowerCase().includes(stringEvent)).forEach(element101 => imprimirCard(card ,element101) )
+            }
         }
-    }
-    else{
-        array.innerHTML = ""
-        if(id2 === "main"){
-            cardMain(data)
-    } 
-    }    
+        else{
+            card.innerHTML = ""
+            if(id2 === "main"){
+                cardMain(data)
+            }
+            if(id2 === "upcoming"){
+                cardUpcoming(data)
+            }
+            if(id2 === "past"){
+                cardpast(data)
+            }
+        }
 }
