@@ -14,7 +14,7 @@ function imprimirCard(padre, value){
 function cardMain(data){
     let conteMain = document.getElementById("main")
     conteMain.className = ("d-flex flex-wrap justify-content-center gap-5")
-    data.events.map(value => imprimirCard(conteMain, value))
+    data.events.forEach(value => imprimirCard(conteMain, value))
 }
 //upcoming
 function cardUpcoming(data) {
@@ -79,7 +79,7 @@ function imprimirCategorys(padre, value){
 function eventsCategory(data,id,id2){
     let checkbox = document.getElementById(id)
     let aray = categorys(data).map(values => ({ value : values, checked : false}))
-    checkbox.addEventListener("change",(element => imprimirCardCategory(data, aray, element,id2)))
+    return checkbox.addEventListener("change",(element => imprimirCardCategory(data, aray, element,id2)))
 }
 function imprimirCardCategory(data, aray, element,id2){
     let array = document.getElementById(id2)
@@ -93,7 +93,7 @@ function imprimirCardCategory(data, aray, element,id2){
     if(x.length !== 0){
         array.innerHTML = ""
         if(id2 === "main"){
-            data.events.filter(element2 => x.includes(element2.category)).forEach(value0 => imprimirCard(array,value0))
+           data.events.filter(element2 => x.includes(element2.category)).forEach(value0 => imprimirCard(array,value0))
         }
         if(id2 === "upcoming"){
             let fecha = new Date(data.currentDate)
@@ -115,7 +115,7 @@ function imprimirCardCategory(data, aray, element,id2){
         if(id2 === "past"){
             cardpast(data)
         }
-    }    
+    }   
 }
 function eventSearch(data, id2, selector){
     let form = document.querySelector(selector)
@@ -133,7 +133,7 @@ function imprimirSearch(data, events, id2, card){
         if( stringEvent.length !== 0){
             card.innerHTML = ""
             if(id2 === "main"){
-            data.events.filter(element11 => element11.name.toLowerCase().includes(stringEvent) || element11.description.toLowerCase().includes(stringEvent)).forEach(element101 => imprimirCard(card ,element101) )
+                data.events.filter(element11 => element11.name.toLowerCase().includes(stringEvent) || element11.description.toLowerCase().includes(stringEvent)).forEach(element101 => imprimirCard(card ,element101) )
             }
             if(id2 === "upcoming"){
                 let fecha = new Date(data.currentDate)
