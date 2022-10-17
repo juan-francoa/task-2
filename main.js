@@ -22,7 +22,7 @@ function cardUpcoming(data) {
     let container = document.getElementById("upcoming")
     container.className = ("d-flex flex-wrap justify-content-center gap-5")
     let fecha = new Date(data.currentDate)
-    data.events.filter(value => (fecha <= new Date(value.date) && imprimirCard(container,value)))
+    data.events.forEach(value => (fecha <= new Date(value.date) && imprimirCard(container,value)))
 }
 
 //past
@@ -30,7 +30,7 @@ function cardpast(data) {
     let container = document.getElementById("past")
     container.className = ("d-flex flex-wrap justify-content-center gap-5")
     let fecha = new Date(data.currentDate)
-    let card = data.events.filter(value => (fecha > new Date(value.date) && imprimirCard(container,value)))
+    data.events.forEach(value => (fecha > new Date(value.date) && imprimirCard(container,value)))
 }
 
 
@@ -113,8 +113,11 @@ function imprimirCategorys(padre, value){
 function eventsCategory(data,id,id2){
     let checkbox = document.getElementById(id)
     let array = document.getElementById(id2)
-    let aray = categorys(data).map(values => ({ value : values, checked : false}))
     checkbox.addEventListener("change",(value => filters("imprimirCardCategory" , value.target.value, id2).forEach(value0 => imprimirCard(array,value0))))
+}
+
+function filterCategorys(info, x){
+    return info.filter(element2 => x.includes(element2.category))  
 }
 
 function imprimirCardCategory(data, x, id2){
@@ -122,17 +125,16 @@ function imprimirCardCategory(data, x, id2){
     let arrayfiltrado
     array.className = ("d-flex flex-wrap justify-content-center gap-5")
     array.innerHTML = ""
-    if(x.length !== 0){
-        
+    if(x.length !== 0){   
         if(id2 === "main"){
-            arrayfiltrado = data.filter(element2 => x.includes(element2.category))            
+            arrayfiltrado = filterCategorys(data, x)            
         }
         if(id2 === "upcoming"){
             
-            arrayfiltrado = filterUpcoming(data).filter(element2 => x.includes(element2.category))
+            arrayfiltrado = filterCategorys(filterUpcoming(data), x)
         }
         if(id2 === "past"){    
-            arrayfiltrado = filterPast(data).filter(element2 => x.includes(element2.category))
+            arrayfiltrado = filterCategorys(filterPast(data), x) 
         }
     }
     else{
@@ -167,6 +169,9 @@ function eventSearch(data, id2, selector){
     form.addEventListener("submit", (events) => events.preventDefault() || filters("imprimirSearch" , events.target[0].value.toLowerCase(), id2).forEach(element101 => imprimirCard(card ,element101) ))
 }
 
+function filtrarSearch(info, stringEvent){
+    return info.filter(element11 => element11.name.toLowerCase().includes(stringEvent) || element11.description.toLowerCase().includes(stringEvent))
+}
 
 function imprimirSearch(data, events, id2){
     let stringEvent = events.toLowerCase()
@@ -176,14 +181,13 @@ function imprimirSearch(data, events, id2){
         if( stringEvent.length !== 0){
             
             if(id2 === "main"){
-                arrayfiltrado = data.filter(element11 => element11.name.toLowerCase().includes(stringEvent) || element11.description.toLowerCase().includes(stringEvent))
+                arrayfiltrado = filtrarSearch(data, stringEvent)
             }
             if(id2 === "upcoming"){
-                arrayfiltrado = filterUpcoming(data).filter(element11 => element11.name.toLowerCase().includes(stringEvent) || element11.description.toLowerCase().includes(stringEvent))
+                arrayfiltrado = filtrarSearch(filterUpcoming(data), stringEvent)
             }
-            if(id2 === "past"){
-                
-                arrayfiltrado = filterPast(data).filter(element11 => element11.name.toLowerCase().includes(stringEvent) || element11.description.toLowerCase().includes(stringEvent))
+            if(id2 === "past"){         
+                arrayfiltrado = filtrarSearch(filterPast(data), stringEvent)
             }
         }
         else{
