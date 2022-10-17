@@ -22,7 +22,7 @@ function cardUpcoming(data) {
     let container = document.getElementById("upcoming")
     container.className = ("d-flex flex-wrap justify-content-center gap-5")
     let fecha = new Date(data.currentDate)
-    data.events.filter(value => (fecha >= new Date(value.date) && imprimirCard(container,value)))
+    data.events.filter(value => (fecha <= new Date(value.date) && imprimirCard(container,value)))
 }
 
 //past
@@ -30,7 +30,7 @@ function cardpast(data) {
     let container = document.getElementById("past")
     container.className = ("d-flex flex-wrap justify-content-center gap-5")
     let fecha = new Date(data.currentDate)
-    let card = data.events.filter(value => (fecha < new Date(value.date) && imprimirCard(container,value)))
+    let card = data.events.filter(value => (fecha > new Date(value.date) && imprimirCard(container,value)))
 }
 
 
@@ -77,7 +77,7 @@ function filters (fn, value, id2, aray){
     else{
         applied[fn] = value
     }
-    console.log(applied)
+    //console.log(applied)
     for(let name in applied){
         if( name === "imprimirSearch"){
             mentors = imprimirSearch(mentors, applied[name] , id2)
@@ -100,7 +100,6 @@ function categorysCheckbox(data, id){
     category.map(value => imprimirCategorys(container, value));
 }
 function imprimirCategorys(padre, value){
-
     padre.innerHTML += 
         `
         <div class="form-check form-check-inline">
@@ -143,10 +142,10 @@ function imprimirCardCategory(data, x, id2){
 }
 
 function filterUpcoming(data){
-    return data.filter(value => (fecha >= new Date(value.date)))
+    return data.filter(value => (fecha < new Date(value.date)))
 }
 function filterPast(data){
-    return data.filter(value => (fecha < new Date(value.date)))
+    return data.filter(value => (fecha >= new Date(value.date)))
 }
 
 function elseFiltrado(data, id2){
@@ -155,10 +154,10 @@ function elseFiltrado(data, id2){
         arrayfiltrado = data
     }
     if(id2 === "upcoming"){
-        arrayfiltrado =  data.filter(value => (fecha >= new Date(value.date) ))
+        arrayfiltrado =   filterUpcoming(data)
     }
     if(id2 === "past"){
-        arrayfiltrado = data.filter(value => (fecha < new Date(value.date) ))
+        arrayfiltrado = filterPast(data)
     }
     return arrayfiltrado
 }
