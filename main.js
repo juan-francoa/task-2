@@ -56,7 +56,10 @@ if(pas){
     eventsCategory(data, "checkbox-past", "past")
     eventSearch(data, "past" , "form")
 }
-
+let deta = document.getElementById("details")
+if(deta){
+    details(data , "details")
+}
 
 arrayCat = []
 fecha = new Date(data.currentDate)
@@ -196,10 +199,7 @@ function imprimirSearch(data, events, id2){
         }
         return arrayfiltrado
 }
-let deta = document.getElementById("details")
-if(deta){
-    details(data , "details")
-}
+
 function details(data, id){
     let a = Number(location.search.slice(4))
     let card = document.getElementById(id)
@@ -207,23 +207,25 @@ function details(data, id){
     imprimirDetails(dataFiltrada ,card)
 }
 function imprimirDetails(array,padre){
-    padre.className = ("d-flex flex-wrap justify-content-center gap-10")
+    padre.className = ("d-flex flex-wrap justify-content-center")
     padre.innerHTML = 
         `
-        <div class="card text-center " style="width: 30rem;">
-            <img src="${array["image"]}" class="card-img-top" alt="${array["name"]}">
+        <div class="card text-center mb-5 mt-5 " style="width: 40%;">
+            <img src="${array.image}" class="card-img-top" alt="${array.image}">
             <div class="card-body">
-                    <h5 class="bg-primary bg-opacity-50">Name : ${array["name"]}</h5> 
+                    <p class="bg-primary bg-opacity-50">Name : ${array["name"]}</p> 
 
-                    <h5>Category : ${array["category"]}</h5> 
+                    <p>Date : ${array.date}</p> 
 
-                    <h5  class="bg-primary bg-opacity-50">Description : ${array["description"]}</h5> 
+                    <p class="bg-primary bg-opacity-50">Category : ${array.category}</p> 
 
-                    <h5>Place : ${array["place"]}</h5> 
+                    <p>Description : ${array.description}</p> 
 
-                    <h5  class="bg-primary bg-opacity-50">Capacity : ${array["capacity"]}</h5> 
+                    <p class="bg-primary bg-opacity-50">Place : ${array.place}</p> 
+
+                    <p>Capacity : ${array.capacity}</p> 
                     
-                    <h5>Price : ${array["price"]}$</h5> 
+                    <p class="bg-primary bg-opacity-50">Price : ${array.price}$</p> 
             </div>
         </div>
         `  
