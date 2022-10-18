@@ -6,7 +6,7 @@ function imprimirCard(padre, value){
             <div class="card-body">
                 <h5 class="card-title">${value["name"]}</h5>
                 <p class="card-text">${value["description"]}</p>
-                <a href="#" class="btn btn-primary">Details</a>
+                <a href="details.html?id=${value._id}" class="btn btn-primary">Details</a>
             </div>
         </div>
         `  
@@ -35,7 +35,7 @@ function cardpast(data) {
 
 
 let xs = document.getElementById("main")
-if(xs !== null){
+if(xs){
     cardMain(data)
     categorysCheckbox(data, "checkbox-index")
     eventsCategory(data, "checkbox-index", "main")
@@ -43,19 +43,20 @@ if(xs !== null){
 }
 
 let up = document.getElementById("upcoming")
-if(up !== null){
+if(up){
     cardUpcoming(data)
     categorysCheckbox(data, "checkbox-upcoming")
     eventsCategory(data, "checkbox-upcoming", "upcoming")
     eventSearch(data, "upcoming" , "form")
 }
 let pas = document.getElementById("past")
-if(pas !== null){
+if(pas){
     cardpast(data)
     categorysCheckbox(data, "checkbox-past")
     eventsCategory(data, "checkbox-past", "past")
     eventSearch(data, "past" , "form")
 }
+
 
 arrayCat = []
 fecha = new Date(data.currentDate)
@@ -194,4 +195,36 @@ function imprimirSearch(data, events, id2){
             arrayfiltrado = elseFiltrado(data,id2)
         }
         return arrayfiltrado
+}
+let deta = document.getElementById("details")
+if(deta){
+    details(data , "details")
+}
+function details(data, id){
+    let a = Number(location.search.slice(4))
+    let card = document.getElementById(id)
+    dataFiltrada = data.events.find(element => (element._id === a))
+    imprimirDetails(dataFiltrada ,card)
+}
+function imprimirDetails(array,padre){
+    padre.className = ("d-flex flex-wrap justify-content-center gap-10")
+    padre.innerHTML = 
+        `
+        <div class="card text-center " style="width: 30rem;">
+            <img src="${array["image"]}" class="card-img-top" alt="${array["name"]}">
+            <div class="card-body">
+                    <h5 class="bg-primary bg-opacity-50">Name : ${array["name"]}</h5> 
+
+                    <h5>Category : ${array["category"]}</h5> 
+
+                    <h5  class="bg-primary bg-opacity-50">Description : ${array["description"]}</h5> 
+
+                    <h5>Place : ${array["place"]}</h5> 
+
+                    <h5  class="bg-primary bg-opacity-50">Capacity : ${array["capacity"]}</h5> 
+                    
+                    <h5>Price : ${array["price"]}$</h5> 
+            </div>
+        </div>
+        `  
 }
