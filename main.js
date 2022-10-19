@@ -22,7 +22,7 @@ function cardUpcoming(data) {
     let container = document.getElementById("upcoming")
     container.className = ("d-flex flex-wrap justify-content-center gap-5")
     let fecha = new Date(data.currentDate)
-    data.events.forEach(value => (fecha <= new Date(value.date) && imprimirCard(container,value)))
+    data.events.forEach(value => (fecha < new Date(value.date) && imprimirCard(container,value)))
 }
 
 //past
@@ -66,7 +66,7 @@ fecha = new Date(data.currentDate)
 let applied ={
 }
 
-function filters (fn, value, id2, aray){
+function filters (fn, value, id2){
     let mentors = data.events
     if(fn === "imprimirCardCategory" ){
         if(!arrayCat.includes(value)){
@@ -151,7 +151,7 @@ function filterUpcoming(data){
     return data.filter(value => (fecha < new Date(value.date)))
 }
 function filterPast(data){
-    return data.filter(value => (fecha >= new Date(value.date)))
+    return data.filter(value => (fecha > new Date(value.date)))
 }
 
 function elseFiltrado(data, id2){
