@@ -52,7 +52,7 @@ async function api(check, id2 , form){
 
     }
     catch(error){
-        console.log("error inesperado")
+        console.log(error)
     }
 }
 
@@ -134,9 +134,11 @@ function categorys(data){
 function categorysCheckbox(data, id){
     let category = categorys(data)
     let container = document.getElementById(id)
+    console.log(category)
     category.map(value => imprimirCategorys(container, value));
 }
 function imprimirCategorys(padre, value){
+    console.log(value)
     padre.innerHTML += 
         `
         <div class="form-check form-check-inline">
