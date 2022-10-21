@@ -32,39 +32,20 @@
             <h1 class="d-flex align-items-center justify-content-center text-white p-4 h1">Upcoming Events</h1>
         </section>
     </header>
-    <main id="upcoming" class="d-flex flex-column flex-wrap align-items-center gap-5" >
+    <main class="d-flex flex-column flex-wrap align-items-center gap-5" >
         <div class="p-5">
             <div class="d-flex flex-row justify-content-around">
-                <form class="d-flex flex-wrap" action="">
-                    <div class="d-flex flex-wrap flex-row">
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                            <label class="form-check-label" for="inlineCheckbox1">Category</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                            <label class="form-check-label" for="inlineCheckbox1">Category</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                            <label class="form-check-label" for="inlineCheckbox1">Category</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                            <label class="form-check-label" for="inlineCheckbox1">Category</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                            <label class="form-check-label" for="inlineCheckbox1">Category</label>
-                        </div>
+                    <div id="checkbox-upcoming" class="d-flex flex-wrap flex-row">
                     </div>
-                </form>
-                <form class="d-flex " role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-primary " type="submit">Search</button>
+                <form class="d-flex flex-wrap ">
+                    <label for="input-upcoming"></label>
+                    <input id="input-upcoming" name="input-upcoming"class="form-control me-2 col" type="search" placeholder="Search" aria-label="Search">
+                    <label for="button-upcoming"></label>
+                    <button id="button-upcoming" name="button-upcoming" class="btn btn-outline-primary col" type="submit">Search</button>
                 </form>
             </div>
         </div>
+        <div id="upcoming"></div>
     </main>
     <footer class="footer">
         <section class="d-flex justify-content-around p-5">
