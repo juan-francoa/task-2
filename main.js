@@ -34,7 +34,7 @@ function cardpast(data) {
 }
 async function api(check, id2 , form){
     try{
-        let a = await fetch("https://mind-hub.up.railway.app/amazing")
+        let a = await fetch("https://mh-amazing.herokuapp.com/amazing")
     a =  await a.json()
     let fecha = new Date(a.date)
     if(id2==="main"){
@@ -60,7 +60,7 @@ async function api2(id){
     try{
         let c = location.search.slice(4)
         let card = document.getElementById(id)
-        let a = await fetch("https://mind-hub.up.railway.app/amazing/"+c)
+        let a = await fetch("https://mh-amazing.herokuapp.com/amazing/"+c)
         a =  await a.json()
         imprimirDetails(a ,card)
 
@@ -69,7 +69,6 @@ async function api2(id){
         console.log("error inesperado")
     }
 }
-
 let xs = document.getElementById("main")
 if(xs){
     api("checkbox-index", "main" , "form")
@@ -100,7 +99,7 @@ let applied ={
 }
 
 function filters (fn, value, id2, data, fecha){
-    let mentors = data.events
+    let arrayBusqueda = data.events
     if(fn === "imprimirCardCategory" ){
         if(!arrayCat.includes(value)){
             arrayCat.push(value)
@@ -117,13 +116,13 @@ function filters (fn, value, id2, data, fecha){
     //console.log(applied)
     for(let name in applied){
         if( name === "imprimirSearch"){
-            mentors = imprimirSearch(mentors, applied[name] , id2 , fecha)
+            arrayBusqueda = imprimirSearch(arrayBusqueda, applied[name] , id2 , fecha)
         }
         if( name === "imprimirCardCategory"){
-            mentors = imprimirCardCategory(mentors, applied[name], id2, fecha)
+            arrayBusqueda = imprimirCardCategory(arrayBusqueda, applied[name], id2, fecha)
         }
     }
-    return mentors
+    return arrayBusqueda
 }
 
 
@@ -134,11 +133,9 @@ function categorys(data){
 function categorysCheckbox(data, id){
     let category = categorys(data)
     let container = document.getElementById(id)
-    console.log(category)
     category.map(value => imprimirCategorys(container, value));
 }
 function imprimirCategorys(padre, value){
-    console.log(value)
     padre.innerHTML += 
         `
         <div class="form-check form-check-inline">
@@ -237,6 +234,18 @@ function imprimirSearch(data, events, id2, fecha){
 
 function imprimirDetails(array,padre){
     padre.className = ("d-flex flex-wrap justify-content-center")
+    let date = array.event.date.slice(0,-14)
+    let assistance
+    let assistanceOrEstimate 
+    if(array.event.assistance){
+        assistance = array.event.assistance 
+        assistanceOrEstimate = "Assistance"
+    }
+    else{
+        assistance =  array.event.estimate
+        assistanceOrEstimate =  "Estimate"
+    }
+    
     padre.innerHTML = 
         `
         <div class="card text-center mb-5 mt-5 " style="width: 40%;">
@@ -244,7 +253,7 @@ function imprimirDetails(array,padre){
             <div class="card-body">
                     <p class="bg-primary bg-opacity-50">Name : ${array.event.name}</p> 
 
-                    <p>Date : ${array.event.date}</p> 
+                    <p>Date : ${date}</p> 
 
                     <p class="bg-primary bg-opacity-50">Category : ${array.event.category}</p> 
 
@@ -252,9 +261,11 @@ function imprimirDetails(array,padre){
 
                     <p class="bg-primary bg-opacity-50">Place : ${array.event.place}</p> 
 
-                    <p>Capacity : ${array.event.capacity}</p> 
+                    <p> Capacity: ${array.event.capacity}</p> 
+
+                    <p class="bg-primary bg-opacity-50">${assistanceOrEstimate} : ${assistance}</p>
                     
-                    <p class="bg-primary bg-opacity-50">Price : ${array.event.price}$</p> 
+                    <p>Price : ${array.event.price}$</p> 
             </div>
         </div>
         `  
@@ -262,15 +273,15 @@ function imprimirDetails(array,padre){
 async function table(id){
     try{
         let card = document.getElementById(id)
-        let a = await fetch("https://mind-hub.up.railway.app/amazing?time=past")
-        let y =  await a.json()
-        a = y.events.sort((a, b)=> ((Number(b.assistance)/Number(b.capacity)) - (Number(a.assistance)/Number(a.capacity))))
+        let a = await fetch("https://mh-amazing.herokuapp.com/amazing?time=past")
+        let copiaDeA =  await a.json()
+        a = copiaDeA.events.sort((a, b)=> ((Number(b.assistance)/Number(b.capacity)) - (Number(a.assistance)/Number(a.capacity))))
         let  b = a.slice(0,1)
         b.forEach(value => imprimirContenidoTableHighPorc(value, card))
         let c = a.slice(-1)
         c.forEach(value => imprimirContenidoTableHighPorc(value, card))
-        y = y.events.sort((a, b)=> Number(b.capacity) - Number(a.capacity)).slice(0,1)
-        y.forEach(value => imprimirContenidoTableHighPorc(value, card))
+        copiaDeA = copiaDeA.events.sort((a, b)=> Number(b.capacity) - Number(a.capacity)).slice(0,1)
+        copiaDeA.forEach(value => imprimirContenidoTableHighPorc(value, card))
     }
     catch(error){
         console.log(error)
@@ -290,26 +301,25 @@ function imprimirContenidoTableHighPorc(value, padre ){
 async function table1(id, url, estimate){
     try{
         let a = await fetch(url)
-        let y =  await a.json()
-        y = y.events.sort(function(a,b){
+        let copiaDeA =  await a.json()
+        copiaDeA = copiaDeA.events.sort(function(a,b){
             if (a.category < b.category) {
                 return -1;
               }
               if (a.category > b.category) {
                 return 1;
               }
-              // a debe ser igual b
               return 0;
         })
-        let b = y.map(value => value.category)
-        b =   [... new Set(b)].sort()
+        let listCategoys = copiaDeA.map(value => value.category)
+        listCategoys =   [... new Set(listCategoys)].sort()
         let arrayTableRevenues = {}
         let arrayTableAttendance = {}
-        b.forEach(value => arrayTableRevenues[value] = 0)
-        b.forEach(value => arrayTableAttendance[value] = 0)
+        listCategoys.forEach(value => arrayTableRevenues[value] = 0)
+        listCategoys.forEach(value => arrayTableAttendance[value] = 0)
       
-        y.forEach(function (a,b){
-            if((b+1) <= y.length){
+        copiaDeA.forEach(function (a, b, c){
+            if((b+1) <= c.length){
                 if(arrayTableRevenues[a.category] === 0){
                     arrayTableRevenues[a.category] = a[estimate]*a.price
                 }
@@ -319,14 +329,16 @@ async function table1(id, url, estimate){
                 
             }
         })
+        
         let e = 1
-        y.forEach(function (a,b, c){
+        copiaDeA.forEach(function (a, b, c){
             if((b+1) <= c.length){
                 if(arrayTableAttendance[a.category] === 0){
                     arrayTableAttendance[a.category] = a[estimate]/a.capacity*100
                     if(b !== 0){
                         arrayTableAttendance[c[b-1].category] /= e
                         e = 1
+
                     }
                 }
                 else{
@@ -338,7 +350,6 @@ async function table1(id, url, estimate){
                 }
             }
         })
-
         imprimirCategorysTable(id, arrayTableRevenues, arrayTableAttendance)
     }
     catch(error){
@@ -348,8 +359,8 @@ async function table1(id, url, estimate){
 let det = document.getElementById("highest-percentage")
 if(det){
     table("highest-percentage")
-    table1("table2", "https://mind-hub.up.railway.app/amazing?time=upcoming", "estimate")
-    table1("table3","https://mind-hub.up.railway.app/amazing?time=past", "assistance")
+    table1("table2", "https://mh-amazing.herokuapp.com/amazing?time=upcoming", "estimate")
+    table1("table3","https://mh-amazing.herokuapp.com/amazing?time=past", "assistance")
 }
 function imprimirCategorysTable(id, arrayTableRevenues, arrayTableAttendance){
     let card = document.getElementById(id)
@@ -367,6 +378,5 @@ function imprimirCategorysTable(id, arrayTableRevenues, arrayTableAttendance){
             <td class="text-center">${porcent}%</td>
          </tr>
         ` 
-        console.log(value, arrayTableRevenues[value], arrayTableAttendance[value])
     }
 }
